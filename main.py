@@ -1,111 +1,57 @@
+class BooksCollector:
 
-def books_collector():
-    return BooksCollector()
+    def __init__(self):
+        self.books_genre = {}
+        self.favorites = []
+        self.genre = ['Фантастика', 'Ужасы', 'Детективы', 'Мультфильмы', 'Комедии']
+        self.genre_age_rating = ['Ужасы', 'Детективы']
 
+    # добавляем новую книгу
+    def add_new_book(self, name):
+        if not self.books_genre.get(name) and 0 < len(name) < 41:
+            self.books_genre[name] = ''
 
-NAME = 'Book Name'
-WRONG_NAME = 'Wrong Name'
+    # устанавливаем книге жанр
+    def set_book_genre(self, name, genre):
+        if name in self.books_genre and genre in self.genre:
+            self.books_genre[name] = genre
 
+    # получаем жанр книги по её имени
+    def get_book_genre(self, name):
+        return self.books_genre.get(name)
 
-def test_add_book(books_collector):
-    books_collector.add_new_book(NAME)
-    assert books_collector.favorites == []
-    assert books_collector.books_rating == {NAME: 1}
+    # выводим список книг с определённым жанром
+    def get_books_with_specific_genre(self, genre):
+        books_with_specific_genre = []
+        if self.books_genre and genre in self.genre:
+            for name, book_genre in self.books_genre.items():
+                if book_genre == genre:
+                    books_with_specific_genre.append(name)
+        return books_with_specific_genre
 
+    # получаем словарь books_genre
+    def get_books_genre(self):
+        return self.books_genre
 
-def test_add_book_twice(books_collector):
-    books_collector.add_new_book(NAME)
-    books_collector.add_new_book(NAME)
-    assert books_collector.favorites == []
-    assert books_collector.books_rating == {NAME: 1}
+    # возвращаем книги, подходящие детям
+    def get_books_for_children(self):
+        books_for_children = []
+        for name, genre in self.books_genre.items():
+            if genre not in self.genre_age_rating and genre in self.genre:
+                books_for_children.append(name)
+        return books_for_children
 
+    # добавляем книгу в Избранное
+    def add_book_in_favorites(self, name):
+        if name in self.books_genre:
+            if name not in self.favorites:
+                self.favorites.append(name)
 
-def test_add_rating_to_absent_book_fails(books_collector):
-    books_collector.add_new_book(NAME)
-    books_collector.set_book_rating(WRONG_NAME, 5)
-    assert books_collector.favorites == []
-    assert books_collector.books_rating == {NAME: 1}
+    # удаляем книгу из Избранного
+    def delete_book_from_favorites(self, name):
+        if name in self.favorites:
+            self.favorites.remove(name)
 
-
-def test_cant_set_rating_less_than_one(books_collector):
-    books_collector.add_new_book(NAME)
-    books_collector.set_book_rating(NAME, 0)
-    assert books_collector.favorites == []
-    assert books_collector.books_rating == {NAME: 1}
-
-
-def test_cant_set_rating_greater_than_ten(books_collector):
-    books_collector.add_new_book(NAME)
-    books_collector.set_book_rating(NAME, 11)
-    assert books_collector.favorites == []
-    assert books_collector.books_rating == {NAME: 1}
-
-
-def test_absent_book_has_no_rating(books_collector):
-    books_collector.add_new_book(NAME)
-    rating = books_collector.get_book_rating(WRONG_NAME)
-    assert rating is None
-
-
-def test_add_to_favorites(books_collector):
-    books_collector.add_new_book(NAME)
-    books_collector.add_book_in_favorites(NAME)
-    assert books_collector.favorites == [NAME]
-    assert books_collector.books_rating == {NAME: 1}
-
-
-def test_add_to_favorites_fails_if_not_in_ratings(books_collector):
-    books_collector.add_book_in_favorites(NAME)
-    assert books_collector.favorites == []
-    assert books_collector.books_rating == {}
-
-
-def test_delete_from_favorites(books_collector):
-    books_collector.add_new_book(NAME)
-    books_collector.add_book_in_favorites(NAME)
-    books_collector.delete_book_from_favorites(NAME)
-    assert books_collector.favorites == []
-    assert books_collector.books_rating == {NAME: 1}
-
-
-def test_get_list_of_favorites_books(books_collector):
-    books_collector.add_new_book(NAME)
-    books_collector.add_book_in_favorites(NAME)
-    assert books_collector.get_list_of_favorites_books() == [NAME]
-
-
-def test_get_books_rating(books_collector):
-    books_collector.add_new_book(NAME)
-    assert books_collector.get_books_rating() == {NAME: 1}
-
-
-def test_set_book_rating(books_collector):
-    books_collector.add_new_book(NAME)
-    books_collector.set_book_rating(NAME, 7)
-    assert books_collector.books_rating == {NAME: 7}
-
-
-def test_get_books_with_specific_rating(books_collector):
-    books_collector.add_new_book(NAME)
-    books_collector.add_new_book(WRONG_NAME)
-    books_collector.add_new_book('Another Name')
-    books_collector.set_book_rating(WRONG_NAME, 7)
-    result = books_collector.get_books_with_specific_rating(1)
-    assert [NAME, 'Another Name'] == result
-
-
-def test_get_books_with_specific_rating_fails_if_no_books(books_collector):
-    result = books_collector.get_books_with_specific_rating(1)
-    assert [] == result
-
-
-def test_get_books_with_specific_rating_fails_if_no_books_with_same(books_collector):
-    books_collector.add_new_book(NAME)
-    result = books_collector.get_books_with_specific_rating(9)
-    assert [] == result
-
-
-def test_get_books_with_specific_rating_fails_if_wrong_rating(books_collector):
-    books_collector.add_new_book(NAME)
-    result = books_collector.get_books_with_specific_rating(0)
-    assert [] == result
+    # получаем список Избранных книг
+    def get_list_of_favorites_books(self):
+        return self.favorites
