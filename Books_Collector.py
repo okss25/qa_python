@@ -2,15 +2,15 @@ import pytest
 class TestBooksCollector:
 
     def test_add_new_book_add_two_books(self, collector):
-        collector.add_new_book('Саша и Таня и зомби')
-        collector.add_new_book('Что делать, если ребенок... ')
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить ')
         assert len(collector.get_books_genre()) == 2
-        assert 'Саша и Таня и зомби' in collector.get_books_genre()
-        assert 'Что делать, если ребенок...' in collector.get_books_genre()
+        assert 'Гордость и предубеждение и зомби' in collector.get_books_genre()
+        assert 'Что делать, если ваш кот хочет вас убить' in collector.get_books_genre()
 
     def test_add_new_book_add_same_book_twice(self, collector):
-        collector.add_new_book('Саша и Таня и зомби')
-        collector.add_new_book('Саша и Таня и зомби')
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.add_new_book('Гордость и предубеждение и зомби')
         assert len(collector.get_books_genre()) == 1
 
     @pytest.mark.parametrize("book_name", [
